@@ -1,5 +1,17 @@
-tasks = []
+FILE_NAME = "tasks.txt"
 options = {1: "View tasks", 2: "Add task", 3: "Remove task", 4: "Quit"}
+
+def load_tasks():
+    try:
+        with open(FILE_NAME, "r") as file:
+            return [line.strip() for line in file if line.strip()]
+    except FileNotFoundError:
+        return []
+    
+def save_tasks(tasks):
+    with open(FILE_NAME, "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
 
 def view_tasks(tasks):
      if not tasks:
@@ -12,6 +24,7 @@ def view_tasks(tasks):
 def add_task(tasks):
     task = input("What task would you like to add? : ")
     tasks.append(task)
+    save_tasks(tasks)
     print(f"{task} has been added to Tasks!")
     
 def remove_task(tasks):
@@ -32,9 +45,11 @@ def remove_task(tasks):
         return
     else:
         removed = tasks.pop(task_number - 1)
+        save_tasks(tasks)
         print(f"Removed: {removed}")
     
-            
+tasks = load_tasks()
+
 while True:
     print("=== To-Do List ===")
     for number, name in options.items():
@@ -58,21 +73,4 @@ while True:
         elif choice == 2:
             add_task(tasks)
         elif choice == 3:
-            remove_task(tasks)
-
-
-                
-                
-                
-
-                
-                
-    
-        
-    
-        
-
-    
-    
-    
-        
+            remove_task(tasks)  
